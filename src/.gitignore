@@ -1,0 +1,7 @@
+/masterwallet
+/masterwallet-ui
+/*.o
+/*.log
+/cli/*.o
+/gui/*.o
+/all.h.gch
