@@ -16,23 +16,37 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __MASTER_WALLET_UI_H___DUZY__
-#define __MASTER_WALLET_UI_H___DUZY__ 1
-#include "../masterwallet.h"
+#ifndef __MASTER_CHAIN_H___DUZY__
+#define __MASTER_CHAIN_H___DUZY__ 1
+#include "all.h"
 
 namespace mastercoin
 {
-
-    class master_wallet_ui : public master_wallet
+    class master_chain
     {
     public:
-	master_wallet_ui(bitcoin::threadpool & pool);
-	
-	void run();
+	master_chain();
+	virtual ~master_chain();
+
+	void start();
+	void stop();
+	void join();
+
+	bitcoin::blockchain & get_blockchain() { return *blockchain_; }
+	bitcoin::poller & get_poller() { return poller_; }
+	bitcoin::transaction_pool & get_txpool() { return txpool_; }
+	bitcoin::transaction_indexer & get_txindex() { return txindex_; }
+
+    private:
+	void initchain();
+
+    private:
+	bitcoin::threadpool pool_disk_, pool_mem_;
+	std::shared_ptr<bitcoin::blockchain> blockchain_;
+	bitcoin::poller poller_;
+	bitcoin::transaction_pool txpool_;
+	bitcoin::transaction_indexer txindex_;
     };
+}
 
-}//namespace mastercoin
-
-#endif//__MASTER_WALLET_UI_H___DUZY__
-
-
+#endif//__MASTER_CHAIN_H___DUZY__

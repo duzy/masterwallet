@@ -16,9 +16,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "addressource.h"
+#ifndef __TRANSACTION_H___DUZY__
+#define __TRANSACTION_H___DUZY__ 1
+#include "all.h"
 
 namespace mastercoin
 {
+    struct transaction
+    {
+	// TODO: encapsulate different type of transactions 
+    };
+}
 
-}//namespace mastercoin
+#endif//__TRANSACTION_H___DUZY__

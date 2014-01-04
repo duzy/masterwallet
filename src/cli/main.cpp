@@ -16,35 +16,38 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "../masternode.h"
-#include "../masterwallet.h"
-#include "../txbroadcast.h"
-#include "../logging.h"
+#include "../masterui.h"
 #include "display.h"
+
+namespace mastercoin
+{
+    class cli : public master_ui
+    {
+    public:
+	cli(int argc, char**argv);
+
+    protected:
+	virtual void interact();
+
+    private:
+	mastercoin::display display;
+    };
+
+    cli::cli(int argc, char**argv)
+	: master_ui(argc, argv)
+	, display(wallet())			     
+    {
+    }
+
+    void cli::interact()
+    {
+	display.run();
+    }
+}//namespace mastercoin
 
 int main(int argc, char**argv)
 {
-    bool interactive = true;
-
-    std::ofstream outfile("debug.log"), errfile("error.log");
-    mastercoin::logger::setup(outfile, errfile);
-
-    bitcoin::threadpool pool(mastercoin::thread_pool_size);
-    //mastercoin::master_node node(pool);
-    mastercoin::master_wallet wallet(pool);
-
-    //node.start();
-    wallet.start();
-
-    if (interactive) {
-	mastercoin::display display(wallet);
-	display.run();
-    }
-
-    wallet.stop();
-    wallet.join();
-
-    pool.stop();
-    pool.join();
+    mastercoin::cli cli(argc, argv);
+    cli.run();
     return 0;
 }

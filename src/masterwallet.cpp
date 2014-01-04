@@ -20,10 +20,9 @@
 
 namespace mastercoin
 {
-    master_wallet::master_wallet(bitcoin::threadpool & pool)
-	: pool_(pool)
+    master_wallet::master_wallet()
+	: pool_(thread_pool_size)
 	, addresses_()
-	, txcast_()
 	, addbook_()
     {
     }
@@ -51,19 +50,45 @@ namespace mastercoin
 
     void master_wallet::start()
     {
-	txcast_.start();
-
-	// TODO: ...
     }
 
     void master_wallet::stop()
     {
-	txcast_.stop();
+	pool_.stop();
+	{
+	    std::lock_guard<std::mutex> lock(txmutex_);
+	    stopped_ = true;
+	    has_transactions_.notify_one();
+	}
     }
 
     void master_wallet::join()
     {
-	txcast_.join();
+	if (txcaster_.joinable()) txcaster_.join();
+	txcaster_ = std::thread();
+
+	pool_.join();
+    }
+
+    void master_wallet::txcast()
+    {
+	while (!stopped_) {
+	    transaction tx;
+	    {
+		std::unique_lock<std::mutex> lock(txmutex_);
+		has_transactions_.wait(lock, [this]{ return !transactions_.empty() || stopped_; });
+		if (stopped_) break;
+		tx = transactions_.back();
+		transactions_.pop_back();
+	    }
+	    get_protocol()
+	    process_tx(tx);
+	}
+    }
+
+    void master_wallet::process_tx(const transaction & tx)
+    {
+	//bitcoin::log_debug() << "txcast: " << bitcoin::pretty(tx);
     }
     
 }//namespace mastercoin

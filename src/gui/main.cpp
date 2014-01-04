@@ -16,12 +16,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "masterwalletui.h"
+#include "../masterui.h"
+
+namespace mastercoin
+{
+    class gui : public master_ui
+    {
+    public:
+	gui(int argc, char**argv);
+
+    protected:
+	virtual void interact();
+    };
+
+    gui::gui(int argc, char**argv) : master_ui(argc, argv)
+    {
+    }
+
+    void gui::interact()
+    {
+	// TODO: implentation...
+    }
+}
 
 int main(int argc, char**argv)
 {
-    bitcoin::threadpool pool;
-    mastercoin::master_wallet_ui ui(pool);
-    ui.run();
+    mastercoin::gui gui(argc, argv);
+    gui.run();
     return 0;
 }

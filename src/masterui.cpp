@@ -16,9 +16,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "addressource.h"
+#include "masterui.h"
+#include "logging.h"
 
 namespace mastercoin
 {
+    master_ui::master_ui(int argc, char**argv)
+	: wallet_()
+	, node_()
+    {
+    }
+
+    void master_ui::run()
+    {
+	std::ofstream outfile("debug.log"), errfile("error.log");
+	logger::setup(outfile, errfile);
+
+	node_.start();
+	wallet_.start();
+
+	interact();
+
+	node_.stop();
+	wallet_.stop();
+
+	wallet_.join();
+	node_.join();
+    }
 
 }//namespace mastercoin

@@ -16,18 +16,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "masterwalletui.h"
+#ifndef __MASTER_UI_H___DUZY__
+#define __MASTER_UI_H___DUZY__ 1
+#include "masterwallet.h"
+#include "masternode.h"
 
 namespace mastercoin
 {
 
-    master_wallet_ui::master_wallet_ui(bitcoin::threadpool & pool)
-	: master_wallet(pool)
+    class master_ui
     {
-    }
+    public:
+	void run();
 
-    void master_wallet_ui::run()
-    {
-    }
+    protected:
+	master_ui(int argc, char**argv);
+	virtual void interact() = 0;
+
+	master_wallet & wallet() { return wallet_; }
+	master_node & node() { return node_; }
+
+    private:
+	master_wallet wallet_;
+	master_node node_;
+    };
 
 }//namespace mastercoin
+
+#endif//__MASTER_UI_H___DUZY__
+
+

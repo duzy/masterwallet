@@ -1,4 +1,6 @@
 *~
 /*.log
+/blockchain
 /build
+/hosts
 /labs

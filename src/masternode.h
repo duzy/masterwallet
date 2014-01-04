@@ -19,14 +19,28 @@
 #ifndef __MASTER_NODE_H___DUZY__
 #define __MASTER_NODE_H___DUZY__ 1
 #include "all.h"
+#include "networking.h"
+#include "masterchain.h"
 
 namespace mastercoin
 {
     class master_node
     {
     public:
-	master_node(bitcoin::threadpool & pool);
+	master_node();
 	virtual ~master_node();
+
+	void start();
+	void stop();
+	void join();
+
+    private:
+	void on_session_start(const std::error_code& ec);
+
+    private:
+	networking networking_;
+	master_chain masterchain_;
+	bitcoin::session session_;
     };
 }
 

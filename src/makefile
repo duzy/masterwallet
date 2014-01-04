@@ -20,10 +20,13 @@
 SOURCES := \
   logging.cpp \
   addressbook.cpp \
+  addressource.cpp \
   determaddress.cpp \
+  networking.cpp \
+  masterchain.cpp \
   masternode.cpp \
   masterwallet.cpp \
-  txbroadcast.cpp \
+  masterui.cpp \
 
 SOURCES.CLI := \
   cli/main.cpp \
@@ -32,7 +35,6 @@ SOURCES.CLI := \
 
 SOURCES.GUI := \
   gui/main.cpp \
-  gui/masterwalletui.cpp \
 
 CXXFLAGS := $(shell pkg-config --cflags libbitcoin libwallet) -g -ggdb
 LDLIBS := $(shell pkg-config --libs libbitcoin libwallet)

@@ -33,18 +33,15 @@ namespace mastercoin
 {
     window::window(int h, int w, int y, int x)
 	: base(newwin(h, w, y, x))
-	, form(NULL), fields({ NULL })
     {
     }
 
     window::window(window * parent, int h, int w, int y, int x)
 	: base(subwin(parent->base, h, w, y, x))
-	, form(NULL), fields({ NULL })
     {
     }
 
     window::window(window * parent, double wr, double hr)
-	: base(NULL), form(NULL), fields({ NULL })
     {
 	int row, col;
 	getmaxyx(stdscr, row, col);
@@ -54,7 +51,6 @@ namespace mastercoin
     }
 
     window::window(double wr, double hr)
-	: base(NULL), form(NULL), fields({ NULL })
     {
 	int row, col;
 	getmaxyx(stdscr, row, col);
@@ -154,11 +150,17 @@ namespace mastercoin
     }
 
     int window::set_focus(FIELD *field) {
-	return ::set_current_field(form, field);
+	::set_current_field(form, field);
+	return form_driver(form, REQ_END_FIELD);
     }
 
     bool window::do_input(int c) {
-	if (on_input && on_input(this, c)) return true;
+	if (on_char && on_char(this, c)) return true;
+	edit_field(c);
+	return false;
+    }
+
+    void window::edit_field(int c) {
 	switch (c) {
 	case KEY_UP:		form_driver(form, REQ_UP_FIELD); break;
 	case KEY_DOWN:		form_driver(form, REQ_DOWN_FIELD); break;
@@ -183,10 +185,13 @@ namespace mastercoin
 	case KEY_EXIT: break;
 	    //case '':		// FALLTHROUGH
 	case '\n':		// FALLTHROUGH
-	case KEY_ENTER:		commit_field(); break;
+	case KEY_ENTER:
+	    form_driver(form, REQ_END_FIELD);
+	    commit_field();
+	    form_driver(form, REQ_END_FIELD);
+	    break;
 	default: form_driver(form, c); break;
 	}
-	return false;
     }
 
     void window::commit_field()

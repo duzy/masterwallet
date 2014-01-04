@@ -41,6 +41,7 @@ namespace mastercoin
 	void toggle_exchange_screen();
 	void toggle_send_screen();
 	void show_command_window(int row, int col);
+	void donate();
 
     private:
 	master_wallet & wallet_;
@@ -49,6 +50,7 @@ namespace mastercoin
 	window_ptr exchange_window_;
 	window_ptr send_window_;
 	window_ptr command_window_;
+	window_ptr donate_window_;
     };
 }//namespace mastercoin
 

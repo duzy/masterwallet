@@ -20,7 +20,8 @@
 #define __MASTER_WALLET_H___DUZY__ 1
 #include "all.h"
 #include "addressbook.h"
-#include "txbroadcast.h"
+#include "transaction.h"
+#include <list>
 
 namespace mastercoin
 {
@@ -73,7 +74,7 @@ namespace mastercoin
     class master_wallet
     {
     public:
-	master_wallet(bitcoin::threadpool & pool);
+	master_wallet();
 	
 	virtual ~master_wallet();
 	
@@ -98,10 +99,12 @@ namespace mastercoin
 	    mastercoin::balance balance;
 	};
 
+	void txcast();
+	void process_tx(const transaction & tx);
+
     private:
-	bitcoin::threadpool & pool_;
+	bitcoin::threadpool pool_;
 	std::vector<address_details> addresses_;
-	transaction_broadcaster txcast_;
 	address_book addbook_;
     };
 

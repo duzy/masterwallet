@@ -31,11 +31,10 @@ namespace mastercoin
 	WINDOW *base = NULL;
 	FORM *form = NULL;
 	std::vector<FIELD*> fields = { NULL };
-	std::function<bool (window *, int)> on_input;
+	std::function<bool (window *, int)> on_char;
 	std::function<void (window *, FIELD *)> on_field_commit;
 	std::function<void (window *, FIELD *)> on_field_changed;
 
-	bool modle = false;
 	int linecol = 0;
 	int line = 0;
 
@@ -101,6 +100,8 @@ namespace mastercoin
 	int refresh();
 
 	virtual bool do_input(int c);
+
+	void edit_field(int c);
 
 	FIELD *add_label(const std::string & s, int r, int c, int offscreen = 0, int nbuffers = 0);
 	FIELD *add_field(int h, int w, int r, int c, int offscreen = 0, int nbuffers = 0);
