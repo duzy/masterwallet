@@ -50,11 +50,11 @@ namespace mastercoin {
     {
 	if (body.empty()) return;
 	switch (level) {
-	case bitcoin::log_level::debug:	  this->debug  (level, domain, body);
-	case bitcoin::log_level::info:    this->info   (level, domain, body);
-	case bitcoin::log_level::warning: this->warning(level, domain, body);
-	case bitcoin::log_level::error:	  this->error  (level, domain, body);
-	case bitcoin::log_level::fatal:	  this->fatal  (level, domain, body);
+	case bitcoin::log_level::debug:	  this->debug  (level, domain, body); break;
+	case bitcoin::log_level::info:    this->info   (level, domain, body); break;
+	case bitcoin::log_level::warning: this->warning(level, domain, body); break;
+	case bitcoin::log_level::error:	  this->error  (level, domain, body); break;
+	case bitcoin::log_level::fatal:	  this->fatal  (level, domain, body); break;
 	}
     }
 
