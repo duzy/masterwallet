@@ -37,8 +37,8 @@ namespace mastercoin
 	master_node & node() { return node_; }
 
     private:
-	master_wallet wallet_;
 	master_node node_;
+	master_wallet wallet_;
     };
 
 }//namespace mastercoin

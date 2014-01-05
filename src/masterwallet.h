@@ -99,11 +99,7 @@ namespace mastercoin
 	    mastercoin::balance balance;
 	};
 
-	void txcast();
-	void process_tx(const transaction & tx);
-
     private:
-	bitcoin::threadpool pool_;
 	std::vector<address_details> addresses_;
 	address_book addbook_;
     };

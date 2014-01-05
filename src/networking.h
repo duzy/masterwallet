@@ -19,6 +19,7 @@
 #ifndef __NETWORKING_H___DUZY__
 #define __NETWORKING_H___DUZY__ 1
 #include "all.h"
+#include "transaction.h"
 
 namespace mastercoin
 {
@@ -45,6 +46,8 @@ namespace mastercoin
 
 	void on_new_channel(const std::error_code& ec, bitcoin::channel_ptr node);
 	void on_transaction(const std::error_code& ec, const bitcoin::transaction_type& tx, bitcoin::channel_ptr node);
+
+	void txcast();
 
     private:
 	bitcoin::threadpool pool_;

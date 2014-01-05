@@ -54,6 +54,11 @@ namespace mastercoin
 	std::lock_guard<std::mutex> lock(mutex_);
 	stopped_ = true;
 	pool_.stop();
+	{
+	    std::lock_guard<std::mutex> lock(txmutex_);
+	    stopped_ = true;
+	    has_transactions_.notify_one();
+	}
     }
 
     bool networking::stopped()
@@ -64,6 +69,8 @@ namespace mastercoin
 
     void networking::join()
     {
+	if (txcaster_.joinable()) txcaster_.join();
+	txcaster_ = std::thread();
 	pool_.join();
     }
 
@@ -103,5 +110,20 @@ namespace mastercoin
 	    bitcoin::log_debug() << "tx: " << bitcoin::pretty(tx);
 	}
 	subscribe_transaction(node);
+    }
+
+    void networking::txcast()
+    {
+	while (!stopped_) {
+	    transaction tx;
+	    {
+		std::unique_lock<std::mutex> lock(txmutex_);
+		has_transactions_.wait(lock, [this]{ return !transactions_.empty() || stopped_; });
+		if (stopped_) break;
+		tx = transactions_.back();
+		transactions_.pop_back();
+	    }
+	    //get_protocol();
+	}
     }
 }

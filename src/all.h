@@ -19,7 +19,8 @@
 #include <bitcoin/bitcoin.hpp>
 #include <wallet/wallet.hpp>
 #include <condition_variable>
-#include <vector>
 #include <string>
+#include <vector>
+#include <list>
 
 namespace bitcoin = libbitcoin;

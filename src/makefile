@@ -36,6 +36,8 @@ SOURCES.CLI := \
 SOURCES.GUI := \
   gui/main.cpp \
 
+DEPENDS := $(patsubst %.cpp,%.d,$(SOURCES) $(SOURCES.CLI) $(SOURCES.GUI))
+
 CXXFLAGS := $(shell pkg-config --cflags libbitcoin libwallet) -g -ggdb
 LDLIBS := $(shell pkg-config --libs libbitcoin libwallet)
 
@@ -49,14 +51,14 @@ BUILD_TARGET = $(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 all: $(TARGETS)
 
-$(SOURCES): all.h.gch
-$(SOURCES): %.cpp: %.h
-# $(SOURCES.CLI) $(SOURCES.GUI)
-
 all.h.gch: all.h ; $(COMPILE.cpp) $(OUTPUT_OPTION) -g $<
+
+$(DEPENDS): %.d: %.cpp ; $(COMPILE.cpp) -MM -MF $@ $<
 
 masterwallet: $(OBJECTS) $(OBJECTS.CLI)
 	$(call BUILD_TARGET) -lform -lncurses
 
 masterwallet-ui: $(OBJECTS) $(OBJECTS.GUI)
 	$(call BUILD_TARGET)
+
+include $(DEPENDS)

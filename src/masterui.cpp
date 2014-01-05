@@ -22,8 +22,8 @@
 namespace mastercoin
 {
     master_ui::master_ui(int argc, char**argv)
-	: wallet_()
-	, node_()
+	: node_()
+	, wallet_()
     {
     }
 
