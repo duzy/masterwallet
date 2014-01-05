@@ -20,6 +20,13 @@
 
 namespace mastercoin {
 
+    static void log(std::ostream &out, bitcoin::log_level level, const std::string& domain, const std::string& body)
+    {
+	out << level_repr(level);
+	if (!domain.empty()) out << " [" << domain << "]";
+	out << ": " << body << std::endl;
+    }
+
     logger::logger(std::ostream & debug, std::ostream & error)
 	: debug_(debug), error_(error)
     {
@@ -41,33 +48,39 @@ namespace mastercoin {
 
     void logger::operator()(bitcoin::log_level level, const std::string& domain, const std::string& body)
     {
+	if (body.empty()) return;
 	switch (level) {
-	case bitcoin::log_level::debug:	  this->debug  (domain, body);
-	case bitcoin::log_level::info:    this->info   (domain, body);
-	case bitcoin::log_level::warning: this->warning(domain, body);
-	case bitcoin::log_level::error:	  this->error  (domain, body);
-	case bitcoin::log_level::fatal:	  this->fatal  (domain, body);
+	case bitcoin::log_level::debug:	  this->debug  (level, domain, body);
+	case bitcoin::log_level::info:    this->info   (level, domain, body);
+	case bitcoin::log_level::warning: this->warning(level, domain, body);
+	case bitcoin::log_level::error:	  this->error  (level, domain, body);
+	case bitcoin::log_level::fatal:	  this->fatal  (level, domain, body);
 	}
     }
 
-    void logger::info(const std::string& domain, const std::string& body)
+    void logger::info(bitcoin::log_level level, const std::string& domain, const std::string& body)
     {
+	log(debug_, level, domain, body);
     }
 
-    void logger::warning(const std::string& domain, const std::string& body)
+    void logger::debug(bitcoin::log_level level, const std::string& domain, const std::string& body)
     {
+	log(debug_, level, domain, body);
     }
 
-    void logger::debug(const std::string& domain, const std::string& body)
+    void logger::warning(bitcoin::log_level level, const std::string& domain, const std::string& body)
     {
+	log(error_, level, domain, body);
     }
 
-    void logger::error(const std::string& domain, const std::string& body)
+    void logger::error(bitcoin::log_level level, const std::string& domain, const std::string& body)
     {
+	log(error_, level, domain, body);
     }
 
-    void logger::fatal(const std::string& domain, const std::string& body)
+    void logger::fatal(bitcoin::log_level level, const std::string& domain, const std::string& body)
     {
+	log(error_, level, domain, body);
     }
 
 }//namespace mastercoin

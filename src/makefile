@@ -53,7 +53,7 @@ all: $(TARGETS)
 
 all.h.gch: all.h ; $(COMPILE.cpp) $(OUTPUT_OPTION) -g $<
 
-$(DEPENDS): %.d: %.cpp ; $(COMPILE.cpp) -MM -MF $@ $<
+$(DEPENDS): %.d: %.cpp ; $(COMPILE.cpp) -MM -MF $@ -MQ $(@:%.d=%.o) $<
 
 masterwallet: $(OBJECTS) $(OBJECTS.CLI)
 	$(call BUILD_TARGET) -lform -lncurses

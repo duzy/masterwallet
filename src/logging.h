@@ -49,11 +49,11 @@ namespace mastercoin
 	static void setup(std::ostream & outdebug, std::ostream & outerror);
 
     protected:
-	virtual void info(const std::string& domain, const std::string& body);
-	virtual void warning(const std::string& domain, const std::string& body);
-	virtual void debug(const std::string& domain, const std::string& body);
-	virtual void error(const std::string& domain, const std::string& body);
-	virtual void fatal(const std::string& domain, const std::string& body);
+	virtual void info   (bitcoin::log_level level, const std::string& domain, const std::string& body);
+	virtual void warning(bitcoin::log_level level, const std::string& domain, const std::string& body);
+	virtual void debug  (bitcoin::log_level level, const std::string& domain, const std::string& body);
+	virtual void error  (bitcoin::log_level level, const std::string& domain, const std::string& body);
+	virtual void fatal  (bitcoin::log_level level, const std::string& domain, const std::string& body);
 
     protected:
 	std::ostream & debug_;

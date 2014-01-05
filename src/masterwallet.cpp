@@ -21,7 +21,7 @@
 namespace mastercoin
 {
     master_wallet::master_wallet()
-	: addresses_()
+	: addresses_(), addrmutex_()
 	, addbook_()
     {
     }
@@ -32,18 +32,20 @@ namespace mastercoin
 
     money master_wallet::get_balance(currency cc) const
     {
+	std::lock_guard<std::mutex> lock(const_cast<master_wallet*>(this)->addrmutex_);
 	uint64_t balance = 0;
 	for (const auto & addr : addresses_) {
-	    balance += addr.balance.get_amount(cc);
+	    balance += addr->balance.get_amount(cc);
 	}
 	return money(cc, balance);
     }
 
     void master_wallet::add_address(const bitcoin::payment_address & address, const money & m)
     {
-	address_details a;
-	a.address = address;
-	a.balance.set_amount(m);
+	std::lock_guard<std::mutex> lock(addrmutex_);
+	address_details_ptr a(new address_details);
+	a->address = address;
+	a->balance.set_amount(m);
 	addresses_.push_back(a);
     }
 

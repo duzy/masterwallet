@@ -62,6 +62,7 @@ namespace mastercoin
 	std::mutex txmutex_;
 	std::thread txcaster_;
     };
+
 }
 
 #endif//__NETWORKING_H___DUZY__

@@ -21,7 +21,6 @@
 #include "all.h"
 #include "addressbook.h"
 #include "transaction.h"
-#include <list>
 
 namespace mastercoin
 {
@@ -83,8 +82,8 @@ namespace mastercoin
 	void join();
 
 	std::size_t get_address_count() const { return addresses_.size(); }
-	bitcoin::payment_address get_address(int n) const { return addresses_[n].address; }
-	balance get_address_balance(int n) const { return addresses_[n].balance; }
+	bitcoin::payment_address get_address(int n) const { return addresses_[n]->address; }
+	balance get_address_balance(int n) const { return addresses_[n]->balance; }
 
 	money get_balance(currency cc) const;
 
@@ -99,8 +98,11 @@ namespace mastercoin
 	    mastercoin::balance balance;
 	};
 
+	typedef std::shared_ptr<address_details> address_details_ptr;
+
     private:
-	std::vector<address_details> addresses_;
+	std::vector<address_details_ptr> addresses_;
+	std::mutex addrmutex_;
 	address_book addbook_;
     };
 
